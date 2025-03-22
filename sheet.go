@@ -9,6 +9,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
+// Sheet is a collection of Stacks.
 type Sheet struct {
 	Stacks      []Stack
 	FrameWidth  int
@@ -33,34 +34,41 @@ func (s *Sheet) populateSubImages() error {
 	return nil
 }
 
+// AddStack adds a stack.
 func (s *Sheet) AddStack(st Stack) {
 	s.Stacks = append(s.Stacks, st)
 }
 
+// Stack is a collection of Animations.
 type Stack struct {
 	Name       string
 	Animations []Animation
 	sliceCount int
 }
 
+// AddAnimation adds an animation.
 func (s *Stack) AddAnimation(a Animation) {
 	s.Animations = append(s.Animations, a)
 }
 
+// Animation is a collection of Frames.
 type Animation struct {
 	Name      string
 	Frametime int
 	Frames    []Frame
 }
 
+// AddFrame adds a frame.
 func (a *Animation) AddFrame(f Frame) {
 	a.Frames = append(a.Frames, f)
 }
 
+// Frame is a collection of Slices.
 type Frame struct {
 	Slices []Slice
 }
 
+// Slice is a position and shading value.
 type Slice struct {
 	x       int
 	y       int
@@ -68,6 +76,7 @@ type Slice struct {
 	Image   *ebiten.Image // Sub-image of the sheet if read from Staxie or whatever the image is from AddFrame.
 }
 
+// NewSheetFromStaxie creates a new Sheet from a staxie PNG.
 func NewSheetFromStaxie(data []byte) (Sheet, error) {
 	sheet := Sheet{}
 
