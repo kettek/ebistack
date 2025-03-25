@@ -6,7 +6,7 @@ import (
 
 // Sprite provides an interface for managing and rendering a sprite stack.
 type Sprite struct {
-	sheet         *Sheet
+	Sheet         *Sheet
 	stack         *Stack
 	animation     *Animation
 	frame         *Frame
@@ -22,7 +22,7 @@ type Sprite struct {
 func MakeSprite(sheet *Sheet, stackName string, animName string) Sprite {
 	tps := ebiten.TPS() // 60 per default.
 	framerate := 1000 / tps
-	s := Sprite{sheet: sheet, Scale: 1, FrameRate: framerate}
+	s := Sprite{Sheet: sheet, Scale: 1, FrameRate: framerate}
 	s.SetStack(stackName)
 	s.SetAnimation(animName)
 	s.SliceDistance = 1
@@ -45,7 +45,7 @@ func (s *Sprite) Update() {
 // Draw draws the sprite stack to the given position.
 func (s *Sprite) Draw(screen *ebiten.Image, opts *ebiten.DrawImageOptions) {
 	sliceOpts := &ebiten.DrawImageOptions{}
-	sliceOpts.GeoM.Translate(float64(s.sheet.FrameWidth)/-2, float64(s.sheet.FrameHeight)/-2)
+	sliceOpts.GeoM.Translate(float64(s.Sheet.FrameWidth)/-2, float64(s.Sheet.FrameHeight)/-2)
 	sliceOpts.GeoM.Scale(s.Scale, s.Scale)
 	sliceOpts.GeoM.Rotate(s.Rotation)
 	sliceOpts.GeoM.Concat(opts.GeoM)
@@ -61,7 +61,7 @@ func (s *Sprite) SetStack(name string) {
 	if s.animation != nil {
 		animName = s.animation.Name
 	}
-	for _, stack := range s.sheet.Stacks {
+	for _, stack := range s.Sheet.Stacks {
 		if stack.Name == name {
 			s.stack = &stack
 			s.SetAnimation(animName)
