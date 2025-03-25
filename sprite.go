@@ -6,15 +6,16 @@ import (
 
 // Sprite provides an interface for managing and rendering a sprite stack.
 type Sprite struct {
-	sheet      *Sheet
-	stack      *Stack
-	animation  *Animation
-	frame      *Frame
-	frameindex int
-	frametime  int
-	FrameRate  int // FrameRate expressed of units per update.
-	Rotation   float64
-	Scale      float64
+	sheet         *Sheet
+	stack         *Stack
+	animation     *Animation
+	frame         *Frame
+	frameindex    int
+	frametime     int
+	FrameRate     int // FrameRate expressed of units per update.
+	Rotation      float64
+	Scale         float64
+	SliceDistance float64
 }
 
 // MakeSprite makes a sprite stack from the given sheet using the provided stack and its animation names.
@@ -24,6 +25,7 @@ func MakeSprite(sheet *Sheet, stackName string, animName string) Sprite {
 	s := Sprite{sheet: sheet, Scale: 1, FrameRate: framerate}
 	s.SetStack(stackName)
 	s.SetAnimation(animName)
+	s.SliceDistance = 1
 	return s
 }
 
@@ -49,7 +51,7 @@ func (s *Sprite) Draw(screen *ebiten.Image, opts *ebiten.DrawImageOptions) {
 	sliceOpts.GeoM.Concat(opts.GeoM)
 	for _, slice := range s.frame.Slices {
 		screen.DrawImage(slice.Image, sliceOpts)
-		sliceOpts.GeoM.Translate(0, -1*s.Scale)
+		sliceOpts.GeoM.Translate(0, -s.SliceDistance*s.Scale)
 	}
 }
 
